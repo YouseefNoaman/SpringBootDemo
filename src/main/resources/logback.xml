@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<include
+		resource="org/springframework/boot/logging/logback/base.xml" />
+
+	<property name="HOME_LOG" value="logs/application.log" />
+
+	<!-- Send debug messages to System.out -->
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%p %d [%t] %L - %m%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="APPLICATION"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${HOME_LOG}</file>
+		<append>true</append>
+		<encoder
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%p %d [%t] %L - %m%n</Pattern>
+		</encoder>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover hourly -->
+			<fileNamePattern>./logs/Archived/application.log.%d{yyyy-MM-dd_HH}.%i.gz
+			</fileNamePattern>
+			<maxFileSize>3MB</maxFileSize>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+			<totalSizeCap>30MB</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+
+	<logger name="javaportreader" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="application" level="DEBUG" additivity="false">
+		<appender-ref ref="APPLICATION" />
+	</logger>
+
+	<!-- By default, the level of the root level is set to DEBUG -->
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</root>
+	<root level="INFO">
+		<appender-ref ref="APPLICATION" />
+	</root>
+</configuration>

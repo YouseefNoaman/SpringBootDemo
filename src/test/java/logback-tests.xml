@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+
+	<logger level="debug" name="log" />
+
+	<property name="HOME_LOG" value="logs/application.log" />
+
+	<appender name="FILE-ROLLING"
+
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+		<file>${HOME_LOG}</file>
+
+		<rollingPolicy
+
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- %d{yyyy-19-dd H) this makes a new log file each hour, %d{yyyy-MM-dd_HH-mm} 
+				makes it every minute -->
+			<fileNamePattern>logs/Archived/application.log.%d{yyyy-MM-dd_HH}.%i.gz
+			</fileNamePattern>
+			
+			<!-- each archived file, size max 3MB -->
+			<maxFileSize>
+				3MB
+			</maxFileSize>
+
+			<!-- total size of all archive files, if total size 38MB, it will delete 
+				old archived file -->
+			<totalSizeCap>3MB</totalSizeCap>
+
+			<!-- 30 days to keep -->
+			<maxHistory>
+				30
+			</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern> %d %p %c{1.} [%t] %m%n</pattern>
+		</encoder>
+
+	</appender>
+
+	<logger name="log test" level="debug" additivity="true">
+
+		<appender-ref ref="FILE-ROLLING" />
+
+	</logger>
+
+	<root level="ALL">
+
+		<appender-ref ref="FILE-ROLLING" />
+	</root>
+</configuration>
