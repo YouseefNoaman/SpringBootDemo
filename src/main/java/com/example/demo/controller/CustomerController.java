@@ -6,6 +6,7 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,18 @@ public class CustomerController {
 		this.customerService = customerService;
 	}
 
+	@GetMapping("/user")
+	public String user() {
+		return "THIS IS USER";
+	}
+	
+	@GetMapping("/admin")
+	public String admin() {
+		return "THIS IS ADMIN";
+	}
+	
+	
+	
 	@GetMapping("/info")
 	public String info() {
 		log.info("Logs are working");
@@ -48,7 +61,7 @@ public class CustomerController {
 	}
 
 	@PostMapping("/")
-	public Customer addCustomer(@RequestBody Customer c) {
+	public Customer addCustomer(@Validated @RequestBody Customer c) {
 		return customerService.AddOrUpdateCustomer(c);
 	}
 
