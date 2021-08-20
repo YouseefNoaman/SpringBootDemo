@@ -11,23 +11,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="CUSTOMER")
+@Table(name = "USER")
 @NoArgsConstructor
-@Data public class Customer {
+@Data
+public class User {
 
 	@Id
-	@Column(name="ID", nullable = false)
+	@Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(name = "USERNAME", nullable = false)
+	private String username;
 	
-	@Column(name="NAME", nullable = false)
-	private String name;
+	@Column(name = "PASSWORD", nullable = false)
+	private String password;
 	
-	@Column(name="ADDRESS")
-	private String address;
+	@Column(name = "ROLE", nullable = false)
+	private String role;
 	
-	@Column(name="PHONE_NUMBER", nullable = false)
-	private String phoneNumber;
-	
-	
+	@Column(name = "IS_ENABLED", nullable = false)
+	private boolean isEnabled;
 }
