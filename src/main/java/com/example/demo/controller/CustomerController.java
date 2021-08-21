@@ -3,9 +3,9 @@ package com.example.demo.controller;
 import java.util.List;
 import java.util.Objects;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,6 @@ import com.example.demo.service.impl.CustomerServiceIMPL;
 
 @RestController
 public class CustomerController {
-	private static final Logger log = LoggerFactory.getLogger(CustomerController.class);
 
 	private CustomerServiceIMPL customerService;
 
@@ -31,23 +30,13 @@ public class CustomerController {
 	}
 
 	@GetMapping("/user")
-	public String user() {
-		return "THIS IS USER";
+	public ResponseEntity<String> user() {
+		return ResponseEntity.ok("THIS IS USER");
 	}
-	
+
 	@GetMapping("/admin")
-	public String admin() {
-		return "THIS IS ADMIN";
-	}
-	
-	
-	
-	@GetMapping("/info")
-	public String info() {
-		log.info("Logs are working");
-		log.debug("debug " + log.isDebugEnabled());
-		log.error("error " + log.isInfoEnabled());
-		return "THIS IS WORKING";
+	public ResponseEntity<String> admin() {
+		return ResponseEntity.ok("THIS IS ADMIN");
 	}
 
 	@GetMapping("/all")
@@ -56,28 +45,29 @@ public class CustomerController {
 	}
 
 	@GetMapping("/{id}")
-	public Customer getById(@PathVariable("id") Long id) {
-		return customerService.findById(id);
+	public ResponseEntity<Customer> getById(@PathVariable("id") Long id) {
+		return ResponseEntity.ok(customerService.findById(id));
 	}
 
 	@PostMapping("/")
-	public Customer addCustomer(@Validated @RequestBody Customer c) {
-		return customerService.AddOrUpdateCustomer(c);
+	public ResponseEntity<Customer> addCustomer(@Validated @RequestBody Customer c) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(customerService.AddOrUpdateCustomer(c));
 	}
 
 	@DeleteMapping("/{id}")
-	public Customer deleteCustomer(@PathVariable("id") Long id) {
-		return customerService.DeleteCustomer(id);
+	public ResponseEntity<Customer> deleteCustomer(@PathVariable("id") Long id) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerService.DeleteCustomer(id));
 	}
 
 	@PutMapping("/")
-	public Customer editCustomer(@RequestBody Customer c) {
-		return customerService.AddOrUpdateCustomer(c);
+	public ResponseEntity<Customer> editCustomer(@RequestBody Customer c) {
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerService.AddOrUpdateCustomer(c));
+
 	}
 
 	// Save or update
 	@PutMapping("/{id}")
-	public Customer saveOrUpdate(@RequestBody Customer newCustomer, @PathVariable Long id) {
+	public ResponseEntity<Customer> saveOrUpdate(@RequestBody Customer newCustomer, @PathVariable Long id) {
 
 		Customer old = new Customer();
 		if (id != null) {
@@ -85,9 +75,10 @@ public class CustomerController {
 			old.setName(newCustomer.getName());
 			old.setAddress(newCustomer.getAddress());
 			old.setPhoneNumber(newCustomer.getPhoneNumber());
-			return customerService.AddOrUpdateCustomer(old);
+
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerService.AddOrUpdateCustomer(old));
 		} else {
-			return customerService.AddOrUpdateCustomer(newCustomer);
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerService.AddOrUpdateCustomer(newCustomer));
 		}
 	}
 }

@@ -1,11 +1,8 @@
 package com.example.demo.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.*;
+
+import javax.persistence.*;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,9 +24,14 @@ public class User {
 	@Column(name = "PASSWORD", nullable = false)
 	private String password;
 	
-	@Column(name = "ROLE", nullable = false)
-	private String role;
-	
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "USERS_ROLES",
+            joinColumns = @JoinColumn(name = "ID"),	// USER ID
+            inverseJoinColumns = @JoinColumn(name = "ROLE_ID")		// ROLE ID
+            )
+    private Set<Role> roles = new HashSet<>();
+
 	@Column(name = "IS_ENABLED", nullable = false)
 	private boolean isEnabled;
 }
