@@ -6,6 +6,8 @@ import java.util.Objects;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.Customer;
@@ -48,7 +51,24 @@ public class CustomerController {
 	public List<Customer> getALL() {
 		return customerService.getAll();
 	}
-	
+
+	@Operation(summary = "Get all paging")
+	@GetMapping("/all/{pageNum}")
+	public List<Customer> getAllPaging(@PathVariable(name = "pageNum") int pageNumber) {
+		PageRequest p = PageRequest.of(pageNumber - 1, 2);
+		return customerService.getAll(p);
+	}
+
+	@Operation(summary = "Get all paging and sorting")
+	@GetMapping("/allPS/{pageNum}")
+	public List<Customer> getAllPagingAndSorting(@PathVariable(name = "pageNum") int pageNumber,
+			@RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir) {
+
+		PageRequest p = PageRequest.of(pageNumber - 1, 2,
+				sortDir.equals("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending());
+		return customerService.getAll(p);
+	}
+
 	@Operation(summary = "Get a customer by id")
 	@GetMapping("/{id}")
 	public ResponseEntity<Customer> getById(@PathVariable("id") Long id) {

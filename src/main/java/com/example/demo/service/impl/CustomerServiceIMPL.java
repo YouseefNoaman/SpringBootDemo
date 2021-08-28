@@ -3,6 +3,8 @@ package com.example.demo.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Customer;
@@ -53,4 +55,10 @@ public class CustomerServiceIMPL implements CustomerService {
 	public List<Customer> getAll() {
 		return customerRepository.findAll();
 	}
+
+	@Override
+	public List<Customer> getAll(PageRequest p) {
+		return customerRepository.findAll(p).toList();
+	}
+
 }
