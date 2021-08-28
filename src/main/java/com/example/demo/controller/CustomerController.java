@@ -3,10 +3,12 @@ package com.example.demo.controller;
 import java.util.List;
 import java.util.Objects;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.entity.Customer;
 import com.example.demo.service.impl.CustomerServiceIMPL;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
+@CrossOrigin(origins = "*")
 public class CustomerController {
 
 	private CustomerServiceIMPL customerService;
@@ -43,14 +48,15 @@ public class CustomerController {
 	public List<Customer> getALL() {
 		return customerService.getAll();
 	}
-
+	
+	@Operation(summary = "Get a customer by id")
 	@GetMapping("/{id}")
 	public ResponseEntity<Customer> getById(@PathVariable("id") Long id) {
-		return ResponseEntity.ok(customerService.findById(id));
+		return ResponseEntity.status(HttpStatus.OK).body(customerService.findById(id));
 	}
 
 	@PostMapping("/")
-	public ResponseEntity<Customer> addCustomer(@Validated @RequestBody Customer c) {
+	public ResponseEntity<Customer> addCustomer(@Valid @RequestBody Customer c) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(customerService.AddOrUpdateCustomer(c));
 	}
 
