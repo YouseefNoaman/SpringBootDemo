@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<?> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, WebRequest request) {
 //	   Map<String, String> errors = new HashMap<>();
 //	   ex.getBindingResult().getFieldErrors().forEach(error ->
@@ -52,8 +52,7 @@ public class GlobalExceptionHandler {
 		ErrorDetail errorDetails = new ErrorDetail(ex.getMessage(), HttpStatus.BAD_REQUEST.value(),
 				request.getDescription(false), new Date());
 		errorDetailService.AddOrUpdateErrorDetail(errorDetails);
-		return new ResponseEntity<>(errorDetails.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
-
+		return new ResponseEntity<>(errorDetails.toString(), HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(NotFound.class)

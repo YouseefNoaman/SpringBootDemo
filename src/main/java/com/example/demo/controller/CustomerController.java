@@ -86,7 +86,7 @@ public class CustomerController {
 	}
 
 	@PutMapping("/")
-	public ResponseEntity<Customer> editCustomer(@RequestBody Customer c) {
+	public ResponseEntity<Customer> editCustomer(@Valid @RequestBody Customer c) {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(customerService.AddOrUpdateCustomer(c));
 
 	}

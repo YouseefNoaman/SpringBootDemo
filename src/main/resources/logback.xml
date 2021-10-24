@@ -11,7 +11,7 @@
 	<appender name="STDOUT"
 		class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>%p %d [%t] %L - %m%n</pattern>
+			<pattern>%p %d [%t] %X{CorrelationId} - %m%n</pattern>
 		</encoder>
 	</appender>
 	<appender name="APPLICATION"
@@ -20,7 +20,7 @@
 		<append>true</append>
 		<encoder
 			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%p %d [%t] %L - %m%n</Pattern>
+			<Pattern>%p %d [%t] %X{CorrelationId} - %m%n</Pattern>
 		</encoder>
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
